@@ -1,6 +1,10 @@
 /* run the configuration file */
 do config.do
 
+/* load the necessary tools */
+do $ccode/tools/tools.do
+do $ccode/tools/stata-tex.do
+
 /*********************/
 /* data construction */
 /*********************/

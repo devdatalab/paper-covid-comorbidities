@@ -15,7 +15,7 @@ cap mkdir $tmp
 global datafp $ccode/data
 
 /* define a filepath to the results folder in this repository */
-global outputs $ccode/outputs
+global out $ccode/outputs
 
 /* define age bin indicator variables */
 global age_vars age18_40 age40_50 age50_60 age60_70 age70_80 age80_
