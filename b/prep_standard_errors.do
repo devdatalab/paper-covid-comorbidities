@@ -2,7 +2,7 @@
 
 /* GBD */
 /* do GBD for both countries */
-foreach geo in uk india {
+foreach geo in eng india {
   
   /* calculate standard errors from the GBD data */
   use $health/gbd/gbd_nhs_conditions_`geo', clear
@@ -75,14 +75,14 @@ foreach var in obese_1_2 obese_3 bp_high {
 drop *lower* *upper* *mean*
 
 /* merge in the gbd data */
-merge 1:1 age using $tmp/gbd_se_uk, nogen
+merge 1:1 age using $tmp/gbd_se_eng, nogen
 drop if age < 18 | age > 99
 
-/* append to uk prevalence file */
-merge 1:1 age using $tmp/prev_uk_nhs_matched, nogen
+/* append to england prevalence file */
+merge 1:1 age using $tmp/prev_eng_nhs_matched, nogen
 
 /* save */
-save $tmp/all_uk_se, replace
+save $tmp/all_eng_se, replace
 
 /* get the copd data */
 import delimited using $comocsv/copd_mclean_rates.csv, clear
@@ -113,11 +113,11 @@ replace logse_chronic_resp_dz = logse_chronic_resp_dz / 1.96
 
 /* save */
 keep age logse_chronic_resp_dz
-save $tmp/uk_copd_se, replace
+save $tmp/eng_copd_se, replace
 
 /* merge in with the full data */
-use $tmp/all_uk_se, clear 
-merge 1:1 age using $tmp/uk_copd_se, keepusing(logse_chronic_resp_dz) nogen
+use $tmp/all_eng_se, clear 
+merge 1:1 age using $tmp/eng_copd_se, keepusing(logse_chronic_resp_dz) nogen
 
 /* add the diabetes se using sample size counts from data */
 local diabetes_N_16_44 = 1617
@@ -135,7 +135,7 @@ foreach d in diabetes_contr diabetes_uncontr {
 keep if inrange(age, 18, 99)
 
 /* re-save */
-save $tmp/prev_se_uk_nhs_matched, replace
+save $tmp/prev_se_eng_nhs_matched, replace
 
 /* INDIA */
 use $health/dlhs/data/dlhs_ahs_covid_comorbidities, clear

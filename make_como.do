@@ -1,3 +1,6 @@
+/* run the configuration file */
+do config.do
+
 /*********************/
 /* data construction */
 /*********************/
@@ -8,6 +11,7 @@
 */
 
 /* get continuous fit to UK age hazard ratios */
+cd $ccode
 shell matlab $ccode/b/fit_cts_uk_age_hr.m
 
 /* combine DLHS and AHS */
@@ -24,9 +28,6 @@ do $ccode/b/prep_england_prevalence.do
 
 /* create a clean set of files with relative risks */
 do $ccode/b/prep_hrs.do
-
-/* prep NY odds ratios of death */
-do $ccode/b/prep_ny_mortality.do
 
 /* prep india and UK sex ratios and populations */
 do $ccode/b/prep_pop_sex.do

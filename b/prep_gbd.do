@@ -107,7 +107,7 @@ ren upper_* *_upper
 ren lower_* *_lower
 
 /* save england data */
-savesome if country == "England" using $health/gbd/gbd_nhs_conditions_uk, replace
+savesome if country == "England" using $health/gbd/gbd_nhs_conditions_eng, replace
 
 /* save india data */
 savesome if country == "India" using $health/gbd/gbd_nhs_conditions_india, replace

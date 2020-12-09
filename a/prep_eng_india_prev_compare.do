@@ -1,8 +1,8 @@
-/* merge India and UK age-specific health prevalences with country prefixes */
+/* merge India and England age-specific health prevalences with country prefixes */
 use $datafp/prev_india, clear
 ren prev_* i_*
 
-merge 1:1 age using $datafp/prev_uk_nhs_matched, nogen
+merge 1:1 age using $datafp/prev_eng_nhs_matched, nogen
 ren prev_* u_*
 
 
@@ -11,11 +11,11 @@ gen u_obese = u_obese_1_2 + u_obese_3
 gen i_obese = i_obese_1_2 + i_obese_3
 
 /* label the variables we will graph */
-label var u_diabetes_contr "Diabetes (Controlled, UK)"
-label var u_diabetes_uncontr "Diabetes (Uncontrolled, UK)"
-label var u_hypertension_contr "Hypertension (Controlled, UK)"
-label var u_hypertension_uncontr "Hypertension (Uncontrolled, UK)"
-label var u_obese "Obese (BMI >= 30, UK)"
+label var u_diabetes_contr "Diabetes (Controlled, Eng)"
+label var u_diabetes_uncontr "Diabetes (Uncontrolled, Eng)"
+label var u_hypertension_contr "Hypertension (Controlled, Eng)"
+label var u_hypertension_uncontr "Hypertension (Uncontrolled, Eng)"
+label var u_obese "Obese (BMI >= 30, Eng)"
 label var i_diabetes_contr "Diabetes (Controlled, India)"
 label var i_diabetes_uncontr "Diabetes (Uncontrolled, India)"
 label var i_hypertension_contr "Hypertension (Controlled, India)"

@@ -56,7 +56,7 @@ graphout three_prevalences, pdf
 /* open analysis file */
 use $tmp/como_analysis, clear
 
-/* plot comparison of PRR(age,all health conditions) in india vs. UK matched */
+/* plot comparison of PRR(age,all health conditions) in india vs. England matched */
 sort age
 twoway ///
     (line prr_h_india_full_cts age, lwidth(medthick) lcolor(black)) ///
@@ -76,6 +76,7 @@ drop if strpos(v1, "sign") != 0
 ren v1 variable
 ren v2 coef
 save $tmp/coefs_to_plot, replace
+cd $ccode
 shell python $ccode/a/make_coef_plot.py
 
 /*******************************/

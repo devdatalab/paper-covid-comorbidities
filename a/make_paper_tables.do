@@ -7,10 +7,10 @@ cap !rm -f $tmp/covid_como_sumstats.csv
 /**********************************************************************************************/
 use $tmp/prr_result, clear
 
-/* save all india and uk aggregate prr values by comorbidity, and ratio */
+/* save all india and england aggregate prr values by comorbidity, and ratio */
 foreach v in male $hr_biomarker_vars $hr_gbd_vars health {
   
-  /* UK aggregate risk factor */
+  /* england aggregate risk factor */
   qui sum uprr_`v' [aw=uk_pop]
   local umean = `r(mean)'
   
@@ -18,7 +18,7 @@ foreach v in male $hr_biomarker_vars $hr_gbd_vars health {
   qui sum iprr_`v' [aw=india_pop]
   local imean = `r(mean)'
 
-  /* percent difference India over UK */
+  /* percent difference India over England */
   local perc = (`imean'/`umean' - 1) * 100
 
   /* Get the sign on the % */
@@ -88,8 +88,8 @@ foreach var in male diabetes_uncontr diabetes_contr hypertension_both obese_3 ob
   insert_into_file using $tmp/covid_como_agerisks.csv, key(india_`var'_80_) value("`mu'") format(%2.1f)
 }
 
-/* do the UK demographics */
-use $datafp/uk_pop, clear
+/* do the England demographics */
+use $datafp/eng_pop, clear
 keep if age >= 18
 
 /* get total population total */
@@ -122,7 +122,7 @@ local pop_frac = (`r(sum)' / `tot_pop') * 100
 insert_into_file using $tmp/covid_como_sumstats.csv, key(uk_age_80) value("`pop_frac'") format(%2.1f)
 
 /* Do the GBD comorbidities for both India and the UK */
-foreach geo in india uk {
+foreach geo in india eng {
 
   use $datafp/gbd_nhs_conditions_`geo', clear
 
@@ -138,7 +138,7 @@ foreach geo in india uk {
 
 
 /* Do age-specific prevalences of GBD variables */
-foreach geo in india uk {
+foreach geo in india eng {
 
   use $datafp/gbd_nhs_conditions_`geo', clear
 
@@ -185,9 +185,9 @@ foreach geo in india uk {
 
 
 /* do the UK prevalence */
-use $tmp/uk_prevalences, clear
+use $tmp/eng_prevalences, clear
 drop if age > 99
-merge 1:1 age using $datafp/uk_pop, keep(match master) nogen
+merge 1:1 age using $datafp/eng_pop, keep(match master) nogen
 
 foreach var in male uk_prev_diabetes_contr uk_prev_diabetes_uncontr uk_prev_chronic_resp_dz uk_prev_hypertension_both uk_prev_obese_3 uk_prev_obese_1_2 {
   qui sum `var' [aw=uk_pop]

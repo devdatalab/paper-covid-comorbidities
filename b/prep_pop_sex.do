@@ -34,9 +34,9 @@ keep if inrange(age, 18, 100)
 keep age male india_pop
 save $tmp/india_pop, replace
 
-/********************************/
-/* UK population and male share */
-/********************************/
+/*************************************/
+/* England population and male share */
+/*************************************/
 import delimited using $comocsv/england_gender_age.csv, clear
 gen male_share = male / total
 drop male female
@@ -50,5 +50,5 @@ expand 10 if age == 90
 replace uk_pop = uk_pop/10 if inrange(age, 90, 99)
 replace age = _n - 1 if age == 90
 
-save $tmp/uk_pop, replace
+save $tmp/eng_pop, replace
 

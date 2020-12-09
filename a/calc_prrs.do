@@ -4,10 +4,10 @@
 $datafp/hr_[full|simp]_[cts|dis]
 
 2. a set of prevalences
-$datafp/prev_india, $datafp/prev_uk_nhs_matched
+$datafp/prev_india, $datafp/prev_eng_nhs_matched
 
 3. a population distribution
-$datafp/india_pop, $datafp/uk_pop
+$datafp/india_pop, $datafp/eng_pop
 
 Outcomes
 ---------
@@ -20,8 +20,8 @@ Outcomes
 local hr full_cts
 local prev india
 
-/* loop over prevalence files -- uk_nhs_matched is the England one we use for everything. */
-foreach prev in india uk_nhs_matched {
+/* loop over prevalence files -- eng_nhs_matched is the England one we use for everything. */
+foreach prev in india eng_nhs_matched {
 
   /* loop over hazard ratio sets -- cts means age is continuous and not in bins */
   /* full_cts is the main one that we use. */
@@ -67,8 +67,8 @@ foreach prev in india uk_nhs_matched {
 clear
 set obs 82
 gen age = _n + 17
-foreach prev in india uk_os uk_nhs uk_nhs_matched {
-  foreach hr in simp_dis full_dis simp_cts full_cts ny nycu {
+foreach prev in india eng_nhs_matched {
+  foreach hr in simp_dis full_dis full_cts {
     merge 1:1 age using $tmp/prr_`prev'_`hr', keepusing(prr_all prr_health hr_age) nogen
     ren prr_all prr_all_`prev'_`hr'
     ren prr_health prr_h_`prev'_`hr'
@@ -77,7 +77,7 @@ foreach prev in india uk_os uk_nhs uk_nhs_matched {
 
 /* bring in population shares */
 merge 1:1 age using $datafp/india_pop, keep(master match) nogen keepusing(india_pop)
-merge 1:1 age using $datafp/uk_pop, keep(master match) nogen keepusing(uk_pop)
+merge 1:1 age using $datafp/eng_pop, keep(master match) nogen keepusing(uk_pop)
 
 /* save an analysis file */
 save $tmp/como_analysis, replace
@@ -88,9 +88,6 @@ save $tmp/como_analysis, replace
 /* rename the models to make life easier */
 ren *india_full_cts* *india_full*
 ren *uk_nhs_matched_full_cts* *uk_full*
-ren *uk_nhs_matched_ny* *uk_ny*
-ren *india_simp_cts* *india_simp*
-ren *uk_nhs_simp_cts* *uk_simp*
 
 global modellist india_full uk_full ipop_ehealth
 
@@ -184,13 +181,13 @@ foreach model in $modellist {
   di %25s "`model': " %5.1f (`r(N)' * `r(mean)' * 100)
 }
 
-/**********************************************************/
-/* compare UK health conditions and risk factors to India */
-/**********************************************************/
+/***************************************************************/
+/* compare England health conditions and risk factors to India */
+/***************************************************************/
 use $tmp/prr_india_full_cts, clear
 ren prev* iprev*
 ren prr* iprr*
-merge 1:1 age using $tmp/prr_uk_nhs_matched_full_cts, nogen
+merge 1:1 age using $tmp/prr_eng_nhs_matched_full_cts, nogen
 ren prev* uprev*
 ren prr* uprr*
 
@@ -210,9 +207,9 @@ foreach v in $hr_biomarker_vars $hr_gbd_vars $hr_os_only_vars {
   di %40s "`v' : " %5.2f `rfd' %10.2f `prevd'
 }
 
-/* calculate aggregate risk factor diffs between india and uk */
+/* calculate aggregate risk factor diffs between india and england */
 merge 1:1 age using $datafp/india_pop, keep(master match) nogen keepusing(india_pop)
-merge 1:1 age using $datafp/uk_pop, keep(master match) nogen keepusing(uk_pop)
+merge 1:1 age using $datafp/eng_pop, keep(master match) nogen keepusing(uk_pop)
 
 /* save results to file */
 save $tmp/prr_result, replace
@@ -222,12 +219,12 @@ foreach v in $hr_biomarker_vars $hr_gbd_vars health {
 
   /* show title only if it's the first pass thru the loop */
   if `t' {
-    di %25s " " "  UK    India   India/UK"
-    di %25s " " "------------------------"
+    di %25s " " "  England    India   India/Eng"
+    di %25s " " "-------------------------------"
     }
   local t 0
   
-  /* UK aggregate risk factor */
+  /* England aggregate risk factor */
   qui sum uprr_`v' [aw=uk_pop]
   local umean = `r(mean)'
   
@@ -235,7 +232,7 @@ foreach v in $hr_biomarker_vars $hr_gbd_vars health {
   qui sum iprr_`v' [aw=india_pop]
   local imean = `r(mean)'
 
-  /* percent difference India over UK */
+  /* percent difference India over England */
   local perc = (`imean'/`umean' - 1) * 100
 
   /* Get the sign on the % */

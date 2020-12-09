@@ -13,7 +13,7 @@ replace prev_copd = prev_copd / 100000
 /* keep only 18 - 100 year olds */
 keep if inrange(age, 18, 100)
 keep age prev_copd
-save $tmp/copd_uk_prev, replace
+save $tmp/copd_eng_prev, replace
 
 /* create full condition list */
 global conditionlist diabetes_contr diabetes_uncontr hypertension_contr hypertension_uncontr hypertension_both asthma obese_1_2 obese_3
@@ -57,7 +57,7 @@ drop prevalence
 keep age prev_*
 
 /* Update 06/22: correct data input of COPD with calculations at the top of this file */
-merge 1:1 age using $tmp/copd_uk_prev, nogen
+merge 1:1 age using $tmp/copd_eng_prev, nogen
 replace prev_copd = 0 if mi(prev_copd)
 
 /* old code:
@@ -76,4 +76,4 @@ ren prev_copd prev_chronic_resp_dz
 ren prev* uk_prev*
 
 /* save england prevalences */
-save $tmp/uk_prevalences, replace
+save $tmp/eng_prevalences, replace

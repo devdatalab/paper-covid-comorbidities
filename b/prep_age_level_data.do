@@ -4,19 +4,18 @@
 --------------------------------------------
 a. Full. Age constant but file still has ages for consistency.
 b. Simple. Ditto.
-c. NY age-specific * UK ages & other conditions
 [d. full-discrete]
 [e. simple-discrete]
 
 2. Prevalences: age, prev_conditionX (wide)
 --------------------------------------------
-a. UK age-invariant (OpenSafely)
-b. UK age-variant (OpenSafely + other UK data + GBD)
+a. England age-invariant (OpenSafely)
+b. England age-variant (OpenSafely + other England data + GBD)
 c. India (biomarkers + GBD)
 
 3. Population distribution: age, population
 --------------------------------------------
-a. UK
+a. England
 b. India
 
 Outcomes
@@ -27,7 +26,7 @@ Outcomes
 
 Questions
 ---------
-- do we use UK population age distribution or OpenSafely age distribution?
+- do we use England population age distribution or OpenSafely age distribution?
   - for now we'll use population.
 
   */
@@ -37,12 +36,12 @@ Questions
 /**********************/
 
 /* full-continuous */
-use $tmp/uk_nhs_hazard_ratios_flat_hr_full, clear
+use $tmp/eng_nhs_hazard_ratios_flat_hr_full, clear
 drop v1 age*
 expand 82
 gen age = _n + 17
 order age
-merge 1:1 age using $tmp/uk_age_predicted_hr, keep(match) nogen
+merge 1:1 age using $tmp/eng_age_predicted_hr, keep(match) nogen
 ren hr_full_age_cts age_hr_full
 ren *_hr_full hr_*
 ren *_hr_lnse hr_lnse_*
@@ -50,7 +49,7 @@ drop hr_simp_age_cts
 save $tmp/hr_full_cts, replace
 
 /* full-discrete */
-use $tmp/uk_nhs_hazard_ratios_flat_hr_full, clear
+use $tmp/eng_nhs_hazard_ratios_flat_hr_full, clear
 drop v1
 expand 82
 gen age = _n + 17
@@ -66,12 +65,12 @@ order age
 save $tmp/hr_full_dis, replace
 
 /* simple continuous */
-use $tmp/uk_nhs_hazard_ratios_flat_hr_simp, clear
+use $tmp/eng_nhs_hazard_ratios_flat_hr_simp, clear
 drop v1 age*
 expand 82
 gen age = _n + 17
 order age
-merge 1:1 age using $tmp/uk_age_predicted_hr, keep(match) nogen
+merge 1:1 age using $tmp/eng_age_predicted_hr, keep(match) nogen
 drop hr_full_age_cts
 ren hr_simp_age_cts age_hr_simp
 ren *_hr_simp hr_*
@@ -84,7 +83,7 @@ foreach v of varlist hr_* {
 save $tmp/hr_simp_cts, replace
 
 /* simple discrete */
-use $tmp/uk_nhs_hazard_ratios_flat_hr_simp, clear
+use $tmp/eng_nhs_hazard_ratios_flat_hr_simp, clear
 drop v1
 expand 82
 gen age = _n + 17
@@ -122,31 +121,12 @@ twoway ///
     (line hr_age_simp_dis age) 
 graphout hr_ages
 
-/* full continuous, override with NY state conditions */
-use $tmp/hr_full_cts, clear
-drop *bp_high *diabetes_contr *heart* *kidney* *resp*
-merge 1:1 age using $tmp/nystate_hr, nogen
-save $tmp/hr_ny, replace
-
-/* full cts, override with NY-Cummings */
-use $tmp/hr_full_cts, clear
-drop hr_age hr_male hr_bp_high hr_diabetes_contr hr_chronic_heart_dz hr_chronic_resp_dz
-merge 1:1 age using $tmp/nycu_hr, nogen
-
-/* NY-Cummings hr_age is actually 1.31 for every 10 years. Normalize it to 50 */
-sum hr_age
-local hr = `r(mean)'
-replace hr_age = 1 if age == 50
-replace hr_age = `hr' ^ ((age - 50) / 10)
-
-save $tmp/hr_nycu, replace
-
 /**********************/
 /* prep prevalences   */
 /**********************/
 
 /* ***************************** */
-/* UK OpenSafely (age-invariant) */
+/* England OpenSafely (age-invariant) */
 import delimited using $comocsv/uk_nhs_incidence.csv, clear
 gen x = 1
 replace prevalence = prevalence / 100
@@ -155,22 +135,22 @@ ren prevalence* prev_*
 drop x
 expand 82
 gen age = _n + 17
-/* drop age prevalences-- we're getting these from the UK population */
+/* drop age prevalences-- we're getting these from the England population */
 drop prev*age*
 order age
-save $tmp/prev_uk_os, replace
+save $tmp/prev_eng_os, replace
 
 /* ******* */
-/* UK biomarkers + GBD */
+/* England biomarkers + GBD */
 /* start with biomarkers */
-use $tmp/uk_prevalences, clear
+use $tmp/eng_prevalences, clear
 ren uk_prev* prev*
 keep if inrange(age, 18, 99)
 order age
-save $tmp/uk_biomarkers, replace
+save $tmp/eng_biomarkers, replace
 
 /* bring in GBD */
-merge 1:1 age using $health/gbd/gbd_nhs_conditions_uk, nogen
+merge 1:1 age using $health/gbd/gbd_nhs_conditions_eng, nogen
 keep if inrange(age, 18, 99)
 drop *upper *lower *granular country
 /* use GBD unless non-GBD var already exists */
@@ -186,7 +166,7 @@ foreach v of varlist gbd* {
 
 /* get remaining vars from OpenSafely as age-invariant */
 ren prev* prevc*
-merge 1:1 age using $tmp/prev_uk_os, nogen
+merge 1:1 age using $tmp/prev_eng_os, nogen
 
 /* loop over OpenSafely vars */
 foreach v of varlist prev_* {
@@ -202,20 +182,20 @@ foreach v of varlist prev_* {
 }  
 ren prevc* prev*
 
-/* get male share from UK census data */
+/* get male share from England census data */
 drop prev_female prev_male
-merge 1:1 age using $tmp/uk_pop, keep(match) nogen keepusing(male)
+merge 1:1 age using $tmp/eng_pop, keep(match) nogen keepusing(male)
 ren male prev_male
 
 /* save */
-save $tmp/prev_uk_nhs, replace
+save $tmp/prev_eng_nhs, replace
 
-/* A UK version that doesn't have the conditions we couldn't match in India */
-use $tmp/prev_uk_nhs, clear
+/* A England version that doesn't have the conditions we couldn't match in India */
+use $tmp/prev_eng_nhs, clear
 foreach v in $hr_os_only_vars {
   replace prev_`v' = 0
 }
-save $tmp/prev_uk_nhs_matched, replace
+save $tmp/prev_eng_nhs_matched, replace
 
 /*************/
 /* India     */

@@ -20,14 +20,14 @@ lab var hr_full_up_ec "hazard ratio fully adjusted early censoring upper CI"
 ren *age_sex* *simp*
 
 /* save as dta file */
-save $tmp/uk_nhs_hazard_ratios, replace
+save $tmp/eng_nhs_hazard_ratios, replace
 
 /* raw data has risk factors in long format-- reshape them to wide */
 /* loop over two types of hazard ratios */
 foreach hr in hr_full hr_simp {
 
   /* open the long format HRs */
-  use $tmp/uk_nhs_hazard_ratios, clear  
+  use $tmp/eng_nhs_hazard_ratios, clear  
 
   /* keep the risk factors, the desired hazard ratio, and the confidence interval */
   keep variable `hr' `hr'_low `hr'_up
@@ -48,7 +48,7 @@ foreach hr in hr_full hr_simp {
   ren `hr'* *_`hr'
   
   /* save the wide hazard ratios with standard errors */
-  save $tmp/uk_nhs_hazard_ratios_flat_`hr', replace
+  save $tmp/eng_nhs_hazard_ratios_flat_`hr', replace
 }
 
 /* convert continuous age HRs to stata */
@@ -57,4 +57,4 @@ ren ln_hr_age_sex ln_hr_simp
 gen hr_simp_age_cts = exp(ln_hr_simp)
 gen hr_full_age_cts = exp(ln_hr_full)
 drop ln_*
-save $tmp/uk_age_predicted_hr, replace
+save $tmp/eng_age_predicted_hr, replace

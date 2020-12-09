@@ -8,7 +8,8 @@
 global ccode ~/paper-covid-comorbidities
 
 /* define a filepath where intermediate outputs are stored */
-global tmp ~/tmp
+global tmp $ccode/tmp
+cap mkdir $tmp
 
 /* define a filepath to the data folder in this repository */
 global datafp $ccode/data
@@ -30,35 +31,3 @@ global hr_gbd_vars asthma_ocs autoimmune_dz haem_malig_1 cancer_non_haem_1    //
 /* define varlist found only in opensafely */
 global hr_os_only_vars asthma_no_ocs cancer_non_haem_1_5 cancer_non_haem_5 diabetes_no_measure haem_malig_1_5 haem_malig_5 organ_transplant spleen_dz
 
-
-
-/* define function to save figures */
-cap prog drop graphout
-prog def graphout
-    
-  syntax anything, [png pdf]
-
-  /* strip space from anything */
-  local anything = subinstr(`"`anything'"', " ", "", .)
-
-  /* make everything quiet from here */
-  qui {
-
-    /* always start with an eps file to $tmp */
-    graph export `"$tmp/`anything'.eps"', replace 
-
-    local size 960x960
-      
-    /* if "pdf" is specified, send a PDF to $outputs */
-    if "`pdf'" == "pdf" {
-
-      /* convert the eps to pdf in the $tmp folder */
-      shell epstopdf $tmp/`anything'.eps
-
-      /* now move it to its destination, which is $outputs */
-      shell mv $tmp/`anything'.pdf $output          
-    }
-  }
-  
-end
-/* *********** END program graphout ***************************************** */
