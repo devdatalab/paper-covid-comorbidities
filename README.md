@@ -5,11 +5,13 @@ Replication code for "COVID-19 mortality effects of underlying health conditions
 
 ## Data build
 [[/assets/covid-como-build.png]]
+![alt text](https://github.com/devdatalab/paper-covid-comorbidities/blob/main/assets/covid-como-build.png "Data build workflow")
 
 ### Data sources
 
 ## Data analysis
-[[/assets/covid-como-analysis.png]]
+![alt text](https://github.com/devdatalab/paper-covid-comorbidities/blob/main/assets/covid-como-analysis.png "Analysis workflow")
 
 # Findings
-[[/assets/figure4.png]]
+![alt text](https://github.com/devdatalab/paper-covid-comorbidities/blob/main/assets/figure4.png "Figure 4")
+
