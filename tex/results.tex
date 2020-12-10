@@ -1,0 +1,72 @@
+\documentclass[12pt,letterpaper]{article}
+\setcounter{page}{0}
+
+% Figure panel header font
+\newcommand{\panel}{\fontfamily{phv}\selectfont\scriptsize\textbf}
+
+% include standard package
+\input{front_matter}
+
+% SET FILEPATH TO OUTPUTS FOLDER %
+\newcommand{\outpath}{\string~/ddl/paper-covid-comorbidities/outputs}
+
+\title{COVID-19 mortality effects of underlying health conditions in
+  India: a modelling study: Figures and Tables} \author{Paul Novosad,
+  Radhika Jain, Alison Campion, Sam Asher}
+
+%%%%%%%%%%%%%%%%%%%%%% 
+% NO TITLE PAGE
+%%%%%%%%%%%%%%%%%%%%%% 
+\begin{document}
+\date{\today}
+\maketitle
+\clearpage
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=0.9]{\outpath/three_prevalences.pdf}
+  \end{center}
+  \caption{Prevalence of (A) diabetes, (B) hypertension, and (C)
+    obesity in India and England.}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=1.0]{\outpath/prr_health.pdf}
+  \end{center}
+  \caption{Age-specific population relative risk of COVID-19 mortality from all health conditions ($PRR_{a}$).}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.9]{\outpath/coefplot.pdf}
+  \end{center}
+  \caption{Percent change in population relative risk of COVID-19 mortality from each health condition ($PRR_{c}$) in India versus England.}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=1.0]{\outpath/mort_density_full.pdf}
+  \end{center}
+  \caption{Modelled age distribution of COVID-19 mortality.}
+\end{figure}
+
+\begin{table}[H]
+  \begin{center}
+    \input{\outpath/covid_como_sumstats}
+  \end{center}
+  \caption{Prevalence of COVID-19 risk factors in India and England.}  
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+    \input{\outpath/covid_como_sumhr}
+  \end{center}
+  \caption{Population relative risk of COVID-19 mortality from each health condition ($PRR_{c}$)}
+\end{table}
+
+
+\end{document}
+
