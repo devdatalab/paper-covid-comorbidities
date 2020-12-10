@@ -1,8 +1,8 @@
 # paper-covid-comorbidities
 Replication code for results of "COVID-19 mortality effects of
 underlying health conditions in India: a modelling study" by Paul
-Novosad, Radhika Jain, Alison Campion, and Sam Asher in \emph{BMJ
-Open}, forthcoming 2020. A pre-pring of the paper can be accessed on
+Novosad, Radhika Jain, Alison Campion, and Sam Asher in _BMJ
+Open_, forthcoming 2020. A pre-print of the paper can be accessed on
 [medrxiv](https://www.medrxiv.org/content/10.1101/2020.07.05.20140343v1).
 
 This code was run in Stata 16. 
@@ -15,11 +15,11 @@ run. `make_como.do` then walks you through all of the code in the
 proper order.
 
 ### Data build
-The first section is the data build, which calls files in the build folder,
+The first section in `make_como.do` is the data build, which calls files in the build folder,
 `code/b`. These files import microdata and generate the aggregated
 analysis files used in the paper. The raw data is not included in
-this repository, so this section will not run but it is intended to
-show how we handled the microdata. Below is a diagram illustrating the
+this repository, so this section is intended just to
+show how we handled the microdata but not for individual users to run. Below is a diagram illustrating the
 data build process. The outputs from the build process have been
 generated and stored in the `data/` folder, where they can be sourced
 to run the analysis.
