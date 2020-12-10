@@ -15,21 +15,22 @@ run. `make_como.do` then walks you through all of the code in the
 proper order.
 
 ### Data build
-The first is the data build, which calls files in the build folder,
+The first section is the data build, which calls files in the build folder,
 `code/b`. These files import microdata and generate the aggregated
-analysis file used for the project. The raw data is not included in
+analysis files used in the paper. The raw data is not included in
 this repository, so this section will not run but it is intended to
 show how we handled the microdata. Below is a diagram illustrating the
-data build process.
+data build process. The outputs from the build process have been
+generated and stored in the `data/` folder, where they can be sourced
+to run the analysis.
 
 ![alt text](https://github.com/devdatalab/paper-covid-comorbidities/blob/main/assets/covid-como-build.png "Data build workflow")
 
 ### Data analysis
 The second section of `make_como.do` is the data analysis portion,
-calling files in the analsis folder, `code/a`. All
-of this code runs from aggregated data produced from the build section
-and stored in `data/`. Figures and tables output by the analysis will
-be stored in `outputs/`.  Below is a diagram illustrating the analysis.
+calling files in the analysis folder, `code/a`. Figures and tables
+output by the analysis will be stored in `outputs/`.  Below is a
+diagram illustrating the analysis.
 
 ![alt text](https://github.com/devdatalab/paper-covid-comorbidities/blob/main/assets/covid-como-analysis.png "Analysis workflow")
 
