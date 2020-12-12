@@ -74,7 +74,7 @@ label var bmi "Body Mass Index kg/m^2"
 replace bmi = . if bmi >= 100 
 replace bmi = . if bmi < 10
 
-/* get bmi categories used in UK paper */
+/* get bmi categories used in England paper */
 gen bmi_not_obese = 0 if !mi(bmi)
 replace bmi_not_obese = 1 if (bmi < 30)
 label var bmi_not_obese "not obese, bmi < 30"
@@ -325,7 +325,7 @@ gen bp_not_high = hypertension_biomarker_not
 gen diabetes_uncontr = diabetes_biomarker
 gen hypertension_uncontr = hypertension_biomarker
 
-/* UK prevalence categories force us to combine obese 1 & 2 */
+/* England prevalence categories force us to combine obese 1 & 2 */
 gen obese_1_2 = bmi_obeseI | bmi_obeseII
 gen obese_3   = bmi_obeseIII
 

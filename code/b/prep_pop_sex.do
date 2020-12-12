@@ -41,13 +41,13 @@ import delimited using $comocsv/england_gender_age.csv, clear
 gen male_share = male / total
 drop male female
 ren male_share male
-ren total uk_pop
+ren total eng_pop
 
 /* distribute age 90 weight across remaining years, since age 90 is actually 90+ */
 /* this is basically inconsequential since it is very few people and COPD is the
    only variable that is non-constant from 90-99. */
 expand 10 if age == 90
-replace uk_pop = uk_pop/10 if inrange(age, 90, 99)
+replace eng_pop = eng_pop/10 if inrange(age, 90, 99)
 replace age = _n - 1 if age == 90
 
 save $tmp/eng_pop, replace

@@ -60,7 +60,7 @@ use $tmp/como_analysis, clear
 sort age
 twoway ///
     (line prr_h_india_full_cts age, lwidth(medthick) lcolor(black)) ///
-    (line prr_h_uk_nhs_matched_full_cts age, lwidth(medthick) lcolor(orange)), ///
+    (line prr_h_eng_nhs_matched_full_cts age, lwidth(medthick) lcolor(orange)), ///
     ytitle("Population Relative Risk of COVID-19 Mortality", size(medsmall)) xtitle("Age", size(medsmall)) ///
     legend(lab(1 "India") lab(2 "England") ring(0) pos(5) cols(1) size(small) symxsize(5) bm(tiny) region(lcolor(black))) ///
     name(prr_health, replace)  ylabel(1(.5)3) 
@@ -93,7 +93,7 @@ foreach v of varlist *deaths {
 /* graph with hybrid india population * england health conditions */
 twoway ///
     (line india_full_deaths age if age <= 89, lcolor(black) lpattern(solid) lwidth(medthick))       ///
-    (line uk_full_deaths    age if age <= 89, lcolor(orange) lwidth(medthick) lpattern(solid))     ///
+    (line eng_full_deaths    age if age <= 89, lcolor(orange) lwidth(medthick) lpattern(solid))     ///
     (line ipop_ehealth_deaths age if age <= 89, lcolor("33 173 191") lwidth(medium) lpattern(dash))     ///
     , ytitle("Share of Deaths at each Age (%)", size(medsmall)) xtitle(Age, size(medsmall))  ///
     legend(lab(1 "India") ///

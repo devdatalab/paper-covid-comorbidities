@@ -52,7 +52,7 @@ foreach hr in hr_full hr_simp {
 }
 
 /* convert continuous age HRs to stata */
-import delimited $covidpub/covid/csv/uk_age_predicted_hr.csv, clear
+import delimited $tmp/eng_age_predicted_hr.csv, clear
 ren ln_hr_age_sex ln_hr_simp
 gen hr_simp_age_cts = exp(ln_hr_simp)
 gen hr_full_age_cts = exp(ln_hr_full)

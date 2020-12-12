@@ -322,7 +322,7 @@ qui {
         cap erase $out/`anything'.png
         shell convert $tmp/`anything'.png -resize `rescale'% $out/`anything'.png
       }
-
+    }
   end
   /* *********** END program graphout ***************************************** */
 

@@ -77,7 +77,7 @@ foreach prev in india eng_nhs_matched {
 
 /* bring in population shares */
 merge 1:1 age using $datafp/india_pop, keep(master match) nogen keepusing(india_pop)
-merge 1:1 age using $datafp/eng_pop, keep(master match) nogen keepusing(uk_pop)
+merge 1:1 age using $datafp/eng_pop, keep(master match) nogen keepusing(eng_pop)
 
 /* save an analysis file */
 save $tmp/como_analysis, replace
@@ -87,20 +87,20 @@ save $tmp/como_analysis, replace
 /*****************************/
 /* rename the models to make life easier */
 ren *india_full_cts* *india_full*
-ren *uk_nhs_matched_full_cts* *uk_full*
+ren *eng_nhs_matched_full_cts* *eng_full*
 
-global modellist india_full uk_full ipop_ehealth
+global modellist india_full eng_full ipop_ehealth
 
 /* Calculate the distribution of deaths in the model */
 global mortrate 1
-foreach model in full simp ny nycu {
-  foreach country in uk india {
+foreach model in full {
+  foreach country in eng india {
     gen `country'_`model'_deaths = $mortrate * `country'_pop * prr_all_`country'_`model'
   }
 }
 
 /* simulate a country with India's age distribution but England's health risks */
-gen ipop_ehealth_deaths = $mortrate * india_pop * prr_all_uk_full
+gen ipop_ehealth_deaths = $mortrate * india_pop * prr_all_eng_full
 
 global sim_n 1
 
@@ -209,7 +209,7 @@ foreach v in $hr_biomarker_vars $hr_gbd_vars $hr_os_only_vars {
 
 /* calculate aggregate risk factor diffs between india and england */
 merge 1:1 age using $datafp/india_pop, keep(master match) nogen keepusing(india_pop)
-merge 1:1 age using $datafp/eng_pop, keep(master match) nogen keepusing(uk_pop)
+merge 1:1 age using $datafp/eng_pop, keep(master match) nogen keepusing(eng_pop)
 
 /* save results to file */
 save $tmp/prr_result, replace
@@ -225,7 +225,7 @@ foreach v in $hr_biomarker_vars $hr_gbd_vars health {
   local t 0
   
   /* England aggregate risk factor */
-  qui sum uprr_`v' [aw=uk_pop]
+  qui sum uprr_`v' [aw=eng_pop]
   local umean = `r(mean)'
   
   /* India aggregate risk factor */

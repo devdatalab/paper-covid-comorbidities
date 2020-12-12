@@ -87,12 +87,12 @@ label values age gbdage
 /* smooth each variable to make age continuous */
 foreach v in $hr_gbd_vars diabetes {
   lpoly gbd_`v' age if age > 0 & country == "India", bw(4) gen(gbd_`v'_smooth_ind) at(age)
-  lpoly gbd_`v' age if age > 0 & country == "England", bw(4) gen(gbd_`v'_smooth_uk) at(age)
+  lpoly gbd_`v' age if age > 0 & country == "England", bw(4) gen(gbd_`v'_smooth_eng) at(age)
 
   /* assign smooth vars correctly since lpoly isn't smart enough */
   gen     gbd_`v'_smooth = gbd_`v'_smooth_ind if country == "India"
-  replace gbd_`v'_smooth = gbd_`v'_smooth_uk  if country == "England"
-  drop gbd_`v'_smooth_ind gbd_`v'_smooth_uk
+  replace gbd_`v'_smooth = gbd_`v'_smooth_eng  if country == "England"
+  drop gbd_`v'_smooth_ind gbd_`v'_smooth_eng
 }
 
 /* set smoothed vars as defaults */

@@ -56,14 +56,9 @@ foreach condition in $conditionlist {
 drop prevalence
 keep age prev_*
 
-/* Update 06/22: correct data input of COPD with calculations at the top of this file */
+/* correct data input of COPD with calculations at the top of this file */
 merge 1:1 age using $tmp/copd_eng_prev, nogen
 replace prev_copd = 0 if mi(prev_copd)
-
-/* old code:
-merge 1:1 age using $comocsv/uk_copd_prevalence, keepusing(prevalence) nogen
-drop prev_copd
-ren prevalence prev_copd */
 
 /* drop the original fields and limit to ages in study */
 keep if inrange(age, 18, 100)
@@ -73,7 +68,7 @@ gen prev_bp_high = prev_hypertension_both
 ren prev_asthma prev_asthma_no_ocs
 ren prev_copd prev_chronic_resp_dz
 
-ren prev* uk_prev*
+ren prev* eng_prev*
 
 /* save england prevalences */
 save $tmp/eng_prevalences, replace

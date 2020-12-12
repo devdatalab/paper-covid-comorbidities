@@ -11,7 +11,7 @@ use $tmp/prr_result, clear
 foreach v in male $hr_biomarker_vars $hr_gbd_vars health {
   
   /* england aggregate risk factor */
-  qui sum uprr_`v' [aw=uk_pop]
+  qui sum uprr_`v' [aw=eng_pop]
   local umean = `r(mean)'
   
   /* India aggregate risk factor */
@@ -26,7 +26,7 @@ foreach v in male $hr_biomarker_vars $hr_gbd_vars health {
   else local sign " "
 
   /* save everying in csv for table */
-  insert_into_file using $tmp/covid_como_sumstats.csv, key(uk_`v'_risk) value("`umean'") format(%4.3f)  
+  insert_into_file using $tmp/covid_como_sumstats.csv, key(eng_`v'_risk) value("`umean'") format(%4.3f)  
   insert_into_file using $tmp/covid_como_sumstats.csv, key(india_`v'_risk) value("`imean'") format(%4.3f)
   insert_into_file using $tmp/covid_como_sumstats.csv, key(`v'_ratio_sign) value("`sign'")
   insert_into_file using $tmp/covid_como_sumstats.csv, key(`v'_ratio) value("`perc'") format(%3.2f)  
@@ -93,35 +93,35 @@ use $datafp/eng_pop, clear
 keep if age >= 18
 
 /* get total population total */
-qui sum uk_pop
+qui sum eng_pop
 local tot_pop = `r(sum)'
 
 /* get each age bracket */
-qui sum uk_pop if age >= 18 & age < 40
+qui sum eng_pop if age >= 18 & age < 40
 local pop_frac = (`r(sum)' / `tot_pop') * 100
-insert_into_file using $tmp/covid_como_sumstats.csv, key(uk_age_18_40) value("`pop_frac'") format(%2.1f)
+insert_into_file using $tmp/covid_como_sumstats.csv, key(eng_age_18_40) value("`pop_frac'") format(%2.1f)
 
-qui sum uk_pop if age >= 40 & age < 50
+qui sum eng_pop if age >= 40 & age < 50
 local pop_frac = (`r(sum)' / `tot_pop') * 100
-insert_into_file using $tmp/covid_como_sumstats.csv, key(uk_age_40_50) value("`pop_frac'") format(%2.1f)
+insert_into_file using $tmp/covid_como_sumstats.csv, key(eng_age_40_50) value("`pop_frac'") format(%2.1f)
 
-qui sum uk_pop if age >= 50 & age < 60
+qui sum eng_pop if age >= 50 & age < 60
 local pop_frac = (`r(sum)' / `tot_pop') * 100
-insert_into_file using $tmp/covid_como_sumstats.csv, key(uk_age_50_60) value("`pop_frac'") format(%2.1f)
+insert_into_file using $tmp/covid_como_sumstats.csv, key(eng_age_50_60) value("`pop_frac'") format(%2.1f)
 
-qui sum uk_pop if age >= 60 & age < 70
+qui sum eng_pop if age >= 60 & age < 70
 local pop_frac = (`r(sum)' / `tot_pop') * 100
-insert_into_file using $tmp/covid_como_sumstats.csv, key(uk_age_60_70) value("`pop_frac'") format(%2.1f)
+insert_into_file using $tmp/covid_como_sumstats.csv, key(eng_age_60_70) value("`pop_frac'") format(%2.1f)
 
-qui sum uk_pop if age >= 70 & age < 80
+qui sum eng_pop if age >= 70 & age < 80
 local pop_frac = (`r(sum)' / `tot_pop') * 100
-insert_into_file using $tmp/covid_como_sumstats.csv, key(uk_age_70_80) value("`pop_frac'") format(%2.1f)
+insert_into_file using $tmp/covid_como_sumstats.csv, key(eng_age_70_80) value("`pop_frac'") format(%2.1f)
 
-qui sum uk_pop if age >= 80
+qui sum eng_pop if age >= 80
 local pop_frac = (`r(sum)' / `tot_pop') * 100
-insert_into_file using $tmp/covid_como_sumstats.csv, key(uk_age_80) value("`pop_frac'") format(%2.1f)
+insert_into_file using $tmp/covid_como_sumstats.csv, key(eng_age_80) value("`pop_frac'") format(%2.1f)
 
-/* Do the GBD comorbidities for both India and the UK */
+/* Do the GBD comorbidities for both India and the ENG */
 foreach geo in india eng {
 
   use $datafp/gbd_nhs_conditions_`geo', clear
@@ -184,61 +184,61 @@ foreach geo in india eng {
 }
 
 
-/* do the UK prevalence */
+/* do the ENG prevalence */
 use $tmp/eng_prevalences, clear
 drop if age > 99
 merge 1:1 age using $datafp/eng_pop, keep(match master) nogen
 
-foreach var in male uk_prev_diabetes_contr uk_prev_diabetes_uncontr uk_prev_chronic_resp_dz uk_prev_hypertension_both uk_prev_obese_3 uk_prev_obese_1_2 {
-  qui sum `var' [aw=uk_pop]
+foreach var in male eng_prev_diabetes_contr eng_prev_diabetes_uncontr eng_prev_chronic_resp_dz eng_prev_hypertension_both eng_prev_obese_3 eng_prev_obese_1_2 {
+  qui sum `var' [aw=eng_pop]
   local mu = `r(mean)'*100
   insert_into_file using $datafp/covid_como_sumstats.csv, key(`var') value("`mu'") format(%2.1f)
 }
 
-/* get all age-specific prevalences from uk data */
-foreach var in male uk_prev_chronic_resp_dz uk_prev_diabetes_contr uk_prev_diabetes_uncontr uk_prev_hypertension_both uk_prev_obese_3 uk_prev_obese_1_2 {
+/* get all age-specific prevalences from eng data */
+foreach var in male eng_prev_chronic_resp_dz eng_prev_diabetes_contr eng_prev_diabetes_uncontr eng_prev_hypertension_both eng_prev_obese_3 eng_prev_obese_1_2 {
 
   /* 18 - 40 */
-  qui sum `var' [aw=uk_pop] if age >= 18 & age < 40
+  qui sum `var' [aw=eng_pop] if age >= 18 & age < 40
   local mu = `r(mean)'*100
   insert_into_file using $tmp/covid_como_agerisks.csv, key(`var'_18_40) value("`mu'") format(%2.1f)
 
   /* 40 - 50 */
-  qui sum `var' [aw=uk_pop] if age >= 40 & age < 50
+  qui sum `var' [aw=eng_pop] if age >= 40 & age < 50
   local mu = `r(mean)'*100
   insert_into_file using $tmp/covid_como_agerisks.csv, key(`var'_40_50) value("`mu'") format(%2.1f)
 
   /* 50 - 60 */
-  qui sum `var' [aw=uk_pop] if age >= 50 & age < 60
+  qui sum `var' [aw=eng_pop] if age >= 50 & age < 60
   local mu = `r(mean)'*100
   insert_into_file using $tmp/covid_como_agerisks.csv, key(`var'_50_60) value("`mu'") format(%2.1f)
 
   /* 60 - 70 */
-  qui sum `var' [aw=uk_pop] if age >= 60 & age < 70
+  qui sum `var' [aw=eng_pop] if age >= 60 & age < 70
   local mu = `r(mean)'*100
   insert_into_file using $tmp/covid_como_agerisks.csv, key(`var'_60_70) value("`mu'") format(%2.1f)
 
   /* 70 - 80 */
-  qui sum `var' [aw=uk_pop] if age >= 70 & age < 80
+  qui sum `var' [aw=eng_pop] if age >= 70 & age < 80
   local mu = `r(mean)'*100
   insert_into_file using $tmp/covid_como_agerisks.csv, key(`var'_70_80) value("`mu'") format(%2.1f)
 
   /* 80+ */
-  qui sum `var' [aw=uk_pop] if age >= 80
+  qui sum `var' [aw=eng_pop] if age >= 80
   local mu = `r(mean)'*100
   insert_into_file using $tmp/covid_como_agerisks.csv, key(`var'_80_) value("`mu'") format(%2.1f)
 
 }
 
 /* create the prevalence table 1 */
-table_from_tpl, t($datafp/covid_como_sumstats_tpl.tex) r($tmp/covid_como_sumstats.csv) o($out/covid_como_sumstats.tex)
+table_from_tpl, t($ccode/a/tpl/covid_como_sumstats_tpl.tex) r($tmp/covid_como_sumstats.csv) o($out/covid_como_sumstats.tex)
 
 /* create the risk table 2 */
-table_from_tpl, t($datafp/covid_como_sumhr_tpl.tex) r($tmp/covid_como_sumstats.csv) o($out/covid_como_sumhr.tex)
+table_from_tpl, t($ccode/a/tpl/covid_como_sumhr_tpl.tex) r($tmp/covid_como_sumstats.csv) o($out/covid_como_sumhr.tex)
 
 /* create the age-specific prevalence appendix table */
-table_from_tpl, t($datafp/covid_como_agerisks_tpl.tex) r($tmp/covid_como_agerisks.csv) o($out/covid_como_agerisks.tex)
+table_from_tpl, t($ccode/a/tpl/covid_como_agerisks_tpl.tex) r($tmp/covid_como_agerisks.csv) o($out/covid_como_agerisks.tex)
 
 /* create the o/s vs. england  prevalence appendix table */
-table_from_tpl, t($datafp/covid_como_oscompare_tpl.tex) r($tmp/covid_como_sumstats.csv) o($out/covid_como_oscompare.tex)
+table_from_tpl, t($ccode/a/tpl/covid_como_oscompare_tpl.tex) r($tmp/covid_como_sumstats.csv) o($out/covid_como_oscompare.tex)
 

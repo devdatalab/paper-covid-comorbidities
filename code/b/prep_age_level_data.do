@@ -144,7 +144,7 @@ save $tmp/prev_eng_os, replace
 /* England biomarkers + GBD */
 /* start with biomarkers */
 use $tmp/eng_prevalences, clear
-ren uk_prev* prev*
+ren eng_prev* prev*
 keep if inrange(age, 18, 99)
 order age
 save $tmp/eng_biomarkers, replace

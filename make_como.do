@@ -48,7 +48,7 @@ global hr_os_only_vars asthma_no_ocs cancer_non_haem_1_5 cancer_non_haem_5 diabe
 
 /* get continuous fit to UK age hazard ratios */
 cd $ccode
-shell matlab $ccode/code/b/fit_cts_uk_age_hr.m
+shell matlab $ccode/code/b/fit_cts_eng_age_hr.m
 
 /* combine DLHS and AHS */
 do $ccode/code/b/prep_health_data.do
