@@ -345,4 +345,15 @@ label var obese_3       "Obese (BMI > 40)"
 compress
 save $health/dlhs/data/dlhs_ahs_covid_comorbidities, replace
 
+/* Get national summary prevalances for India from DLHS/AHS - to be used later in Table 1*/
+use $health/dlhs/data/dlhs_ahs_covid_comorbidities, clear
 
+/* drop people over 100 */
+drop if age > 100
+
+/* take the weighted mean of each variable */
+collapse (mean) age18_40 age40_50 age50_60 age60_70 age70_80 age80_ male diabetes_uncontr diabetes_contr hypertension_both obese_3 obese_1_2 [aw=wt], by(all) 
+drop all
+
+/* save  */
+save $datafp/india_como_prev, replace

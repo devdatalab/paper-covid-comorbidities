@@ -85,3 +85,4 @@ drop index prim_key qs* qe* qh* hv*
 /* save */
 compress
 save $health/dlhs/data/dlhs_ahs_merged, replace
+

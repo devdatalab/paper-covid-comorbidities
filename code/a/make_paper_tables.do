@@ -35,13 +35,17 @@ foreach v in male $hr_biomarker_vars $hr_gbd_vars health {
 /**************************************************/
 /* Store prevalences into a CSV for a latex table */
 /**************************************************/
-/* get prevalences from DLHS/AHS */
-use $health/dlhs/data/dlhs_ahs_covid_comorbidities, clear
-drop if age > 100
+
+/* open national, weighted prevalences */
+use $datafp/india_como_prev, clear
 
 /* get all total population prevalences for table 1 */
 foreach var in age18_40 age40_50 age50_60 age60_70 age70_80 age80_ male diabetes_uncontr diabetes_contr hypertension_both obese_3 obese_1_2{
-  qui sum `var' [aw=wt]
+
+  /* get value for this variable */
+  qui sum `var'
+  
+  /* multiply the percentage by 100 for the table */
   local mu = `r(mean)'*100
 
   /* add the  mean to the csv that will feed the latex table values */
