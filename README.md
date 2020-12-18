@@ -2,7 +2,7 @@
 Replication code for results of "COVID-19 mortality effects of
 underlying health conditions in India: a modelling study" by Paul
 Novosad, Radhika Jain, Alison Campion, and Sam Asher in _BMJ
-Open_, accessed [here](https://bmjopen.bmj.com/content/10/12/e043165).
+Open_, December 2020, accessed [here](https://bmjopen.bmj.com/content/10/12/e043165).
 
 ## Repository guide
 To run the code, open `make_como.do`. Set the global filepaths at the
