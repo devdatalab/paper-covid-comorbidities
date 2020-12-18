@@ -18,6 +18,11 @@ global out $ccode/outputs
 /* load the necessary tools - these must be run before any code files */
 do $ccode/tools/tools.do
 do $ccode/tools/stata-tex.do
+ssc install grstyle
+
+/* create and activate python environment */
+shell conda env create -f $ccode/tools/py3.yml
+shell conda activate py3
 
 /*************************************/
 /* set global variables for analysis */

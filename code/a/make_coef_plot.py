@@ -14,7 +14,7 @@ mpl.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 mpl.rc('text', usetex=True)
 
 # read in the data
-df = pd.read_stata(os.path.join(os.environ["TMP"], "coefs_to_plot.dta"))
+df = pd.read_stata("tmp/coefs_to_plot.dta")
 
 # drop gender from this plot of health conditions
 df = df.drop(df.loc[df["variable"] == "male_ratio"].index)
@@ -120,6 +120,6 @@ ax.annotate("England", (-7,17), color="#e38800", fontsize=12)
 # ax.set_title("Percent Change in Population Relative Risk of COVID-19 Mortality \n for each Health Condition in India Relative to England", fontsize=16, color="#383838")
 
 # save figure
-plt.savefig("outputs/coefplot.pdf"), bbox_inches="tight", dpi=150)
+plt.savefig("outputs/coefplot.pdf", bbox_inches="tight")
 
 plt.close("all")
