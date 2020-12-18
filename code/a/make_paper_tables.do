@@ -196,7 +196,7 @@ merge 1:1 age using $datafp/eng_pop, keep(match master) nogen
 foreach var in male eng_prev_diabetes_contr eng_prev_diabetes_uncontr eng_prev_chronic_resp_dz eng_prev_hypertension_both eng_prev_obese_3 eng_prev_obese_1_2 {
   qui sum `var' [aw=eng_pop]
   local mu = `r(mean)'*100
-  insert_into_file using $datafp/covid_como_sumstats.csv, key(`var') value("`mu'") format(%2.1f)
+  insert_into_file using $tmp/covid_como_sumstats.csv, key(`var') value("`mu'") format(%2.1f)
 }
 
 /* get all age-specific prevalences from eng data */

@@ -5,14 +5,27 @@ Novosad, Radhika Jain, Alison Campion, and Sam Asher in _BMJ
 Open_, forthcoming 2020. A pre-print of the paper can be accessed on
 [medrxiv](https://www.medrxiv.org/content/10.1101/2020.07.05.20140343v1).
 
-This code was run in Stata 16. 
-
 ## Repository guide
 To run the code, open `make_como.do`. Set the global filepaths at the
 top of the file as directed in the comments. These global filepaths
 must be set according correctly in order for any code to
 run. `make_como.do` then walks you through all of the code in the
 proper order.
+
+### Dependencies
+All stata code was run in Stata 16.
+
+Python is used to create one of the figures. The environment
+configuration file listing the required packages can be found in
+`tools/py3.yml`. The environment can be created using conda by running
+the following:
+```
+conda env create -f tools/py3.yml
+conda activate py3
+```
+Any other package manager or python installation can be used, just
+ensure the packages listed in the configuration file are
+installed.
 
 ### Data build
 The first section in `make_como.do` is the data build, which calls files in the build folder,
