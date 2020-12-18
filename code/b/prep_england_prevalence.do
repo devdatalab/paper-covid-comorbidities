@@ -71,4 +71,4 @@ ren prev_copd prev_chronic_resp_dz
 ren prev* eng_prev*
 
 /* save england prevalences */
-save $tmp/eng_prevalences, replace
+save $datafp/eng_prevalences, replace

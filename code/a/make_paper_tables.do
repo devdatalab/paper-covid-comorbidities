@@ -189,7 +189,7 @@ foreach geo in india eng {
 
 
 /* do the ENG prevalence */
-use $tmp/eng_prevalences, clear
+use $datafp/eng_prevalences, clear
 drop if age > 99
 merge 1:1 age using $datafp/eng_pop, keep(match master) nogen
 
