@@ -77,7 +77,7 @@ ren v1 variable
 ren v2 coef
 save $tmp/coefs_to_plot, replace
 cd $ccode
-shell python $ccode/a/make_coef_plot.py
+shell python $ccode/code/a/make_coef_plot.py
 
 /*******************************/
 /* plot distribution of deaths */
