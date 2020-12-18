@@ -100,16 +100,8 @@ prog def table_from_tpl
       local v
   }
   
-  
-  /* if python path is not set, use current folder */
-  if mi("$PYTHONPATH") {
-
-      /* set path to current folder */
-      local path .
-  }
-  else {
-      local path $PYTHONPATH
-  }
+  /* set path for python code to the tools folder in this repo */
+  local path $ccode/tools
 
   /* check python file existence */
   cap confirm file `path'/table_from_tpl.py
